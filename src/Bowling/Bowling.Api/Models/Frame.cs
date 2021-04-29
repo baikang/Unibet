@@ -136,7 +136,6 @@ namespace Bowling.Api
 
                     if (Order == FrameOrder.Max && (IsStrike || IsSpare))
                     {
-                        //For frame 10, if 
                         IsCompleted = false;
                     }
                     else
