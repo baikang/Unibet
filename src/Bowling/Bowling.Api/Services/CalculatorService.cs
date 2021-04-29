@@ -17,6 +17,23 @@ namespace Bowling.Api
 
         public bool CalculateScore(List<int> pinsDowned, ScoreResponse scoreResponse)
         {
+            if (pinsDowned == null || pinsDowned.Count < Rolls.Min || pinsDowned.Count > Rolls.Max)
+            {
+                return false;
+            }
+
+            try
+            {
+                var game = new Game(pinsDowned);
+                scoreResponse.FrameProgressScores = game.Frames.Select(x => (x.Score == Game.UnDeterminedScore) ? "*" : x.Score.ToString()).ToList();
+                scoreResponse.IsGameCompleted = game.IsGameCompleted;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + ex.StackTrace);
+                return false;
+            }
+
             return true;
         }
 

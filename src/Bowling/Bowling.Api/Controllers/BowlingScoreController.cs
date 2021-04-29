@@ -26,7 +26,7 @@ namespace Bowling.Api
                 return BadRequest("Incorrect request date or format.");
             }
 
-            return new JsonResult(scoreResponse);
+            return Ok(scoreResponse);
         }
     }
 }
