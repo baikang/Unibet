@@ -20,10 +20,11 @@ namespace Bowling.Api
         public IActionResult Calculator([FromBody] ScoreRequest payload)
         {
             var scoreResponse = new ScoreResponse();
+            var errorMessage = string.Empty;
 
-            if (payload == null || !_service.CalculateScore(payload.PinsDowned, scoreResponse))
+            if (payload == null || !_service.CalculateScore(payload.PinsDowned, scoreResponse, out errorMessage))
             {
-                return BadRequest("Incorrect request date or format.");
+                return BadRequest(string.IsNullOrWhiteSpace(errorMessage) ? "Incorrect request date or format." : errorMessage);
             }
 
             return Ok(scoreResponse);

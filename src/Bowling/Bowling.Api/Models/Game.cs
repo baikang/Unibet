@@ -5,7 +5,7 @@ namespace Bowling.Api
 {
     public class Game
     {
-        public const int UnDeterminedScore = -1;
+        
 
         public List<Frame> Frames { get; set; } = new List<Frame>();
         public bool IsGameCompleted
@@ -21,6 +21,11 @@ namespace Bowling.Api
 
             for (int i = 0; i < pinsDowned.Count; i++)
             {
+                if (IsGameCompleted)
+                {
+                    throw new ArgumentOutOfRangeException("pinsDowned", "Too many inputs.");
+                }
+
                 if (frame.AddRoll(pinsDowned[i], RollNumber))
                 {
                     if (frame.IsCompleted)
@@ -50,6 +55,11 @@ namespace Bowling.Api
 
             }
 
+            if (!frame.IsCompleted && frame.NumberOfRolls > 0)
+            {
+                Frames.Add(frame);
+            }
+
             CalculateScroe();
 
         }
@@ -62,7 +72,7 @@ namespace Bowling.Api
             {
                 if (!Frames[i].IsCompleted)
                 {
-                    Frames[i].Score = UnDeterminedScore;
+                    Frames[i].Score = Score.UnDetermined;
                 }
                 else
                 {
@@ -89,12 +99,12 @@ namespace Bowling.Api
                                 }
                                 else
                                 {
-                                    Frames[i].Score = UnDeterminedScore;
+                                    Frames[i].Score = Score.UnDetermined;
                                 }
                             }
                             else //No more frames, can't determine current frame score
                             {
-                                Frames[i].Score = UnDeterminedScore;
+                                Frames[i].Score = Score.UnDetermined;
                             }
 
                         }
@@ -107,7 +117,7 @@ namespace Bowling.Api
                             }
                             else
                             {
-                                Frames[i].Score = UnDeterminedScore;
+                                Frames[i].Score = Score.UnDetermined;
                             }
                         }
                         else //Caculate score for frames with total pinsdowned less than 10

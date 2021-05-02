@@ -15,22 +15,20 @@ namespace Bowling.Api
             _logger = logger;
         }
 
-        public bool CalculateScore(List<int> pinsDowned, ScoreResponse scoreResponse)
+        public bool CalculateScore(List<int> pinsDowned, ScoreResponse scoreResponse, out string errorMessage)
         {
-            if (pinsDowned == null || pinsDowned.Count < Rolls.Min || pinsDowned.Count > Rolls.Max)
-            {
-                return false;
-            }
+            errorMessage = string.Empty;
 
             try
             {
                 var game = new Game(pinsDowned);
-                scoreResponse.FrameProgressScores = game.Frames.Select(x => (x.Score == Game.UnDeterminedScore) ? "*" : x.Score.ToString()).ToList();
+                scoreResponse.FrameProgressScores = game.Frames.Select(x => (x.Score == Score.UnDetermined) ? "*" : x.Score.ToString()).ToList();
                 scoreResponse.IsGameCompleted = game.IsGameCompleted;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message + ex.StackTrace);
+                errorMessage = ex.Message;
                 return false;
             }
 

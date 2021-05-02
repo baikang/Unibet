@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Bowling.Api
 {
@@ -19,20 +20,7 @@ namespace Bowling.Api
             }
         }
 
-        private int _firstRoll;
-        public int FirstRoll
-        {
-            get { return _firstRoll; }
-            set
-            {
-                if (value < PinsDowned.Min || value > PinsDowned.Max)
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
-
-                _firstRoll = value;
-            }
-        }
+        public int FirstRoll { get; set; }
 
         private int _secondRoll;
         public int SecondRoll
@@ -40,22 +28,15 @@ namespace Bowling.Api
             get { return _secondRoll; }
             set
             {
-                if (Order == FrameOrder.Max)
+                if (value <= (PinsDowned.Max - FirstRoll) || (Order == FrameOrder.Max && IsStrike))
                 {
-                    if (value < PinsDowned.Min || value > PinsDowned.Max)
-                    {
-                        throw new ArgumentOutOfRangeException();
-                    }
+                    _secondRoll = value;
+
                 }
                 else
                 {
-                    if (value < PinsDowned.Min || value > (PinsDowned.Max - FirstRoll))
-                    {
-                        throw new ArgumentOutOfRangeException();
-                    }
+                    throw new ArgumentOutOfRangeException("pinsDowned", "Invalid pindowned number.");
                 }
-
-                _secondRoll = value;
             }
         }
 
@@ -65,18 +46,13 @@ namespace Bowling.Api
             get { return _thirdRoll; }
             set
             {
-                if (Order != FrameOrder.Max || value < PinsDowned.Min || value > PinsDowned.Max)
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
-
-                if (FirstRoll == PinsDowned.Max || (FirstRoll + SecondRoll) == PinsDowned.Max)
+                if (Order == FrameOrder.Max && (IsStrike || IsSpare))
                 {
                     _thirdRoll = value;
                 }
                 else
                 {
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("pinsDowned", "Invalid pindowned number.");
                 }
             }
         }

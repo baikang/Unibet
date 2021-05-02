@@ -4,6 +4,6 @@ namespace Bowling.Api
 {
     public interface ICalculatorService
     {
-        bool CalculateScore(List<int> pinsDowned, ScoreResponse scoreResponse);
+        bool CalculateScore(List<int> pinsDowned, ScoreResponse scoreResponse, out string errorMessage);
     }
 }

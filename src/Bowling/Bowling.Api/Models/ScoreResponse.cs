@@ -1,14 +1,14 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Bowling.Api
 {
     public class ScoreResponse
     {
-        [JsonProperty("frameProgressScores")]
+        [JsonPropertyName("frameProgressScores")]
         public List<string> FrameProgressScores { get; set; }
 
-        [JsonProperty("gameCompleted")]
+        [JsonPropertyName("gameCompleted")]
         public bool IsGameCompleted { get; set; }
     }
 }
